@@ -14,14 +14,14 @@ public class MovimientoPlayer : MonoBehaviour
 
 
     [Header("Movimiento")]
-    public float velocidadCaminar ; 
-    public float velocidadCorrer ; 
-    private float velocidadActual;        
+    public float velocidadCaminar;
+    public float velocidadCorrer;
+    private float velocidadActual;
     private float movX;
     private bool estaCorriendo = true;
 
     [Header("Salto")]
-    public float fuerzaSalto ;
+    public float fuerzaSalto;
     public LayerMask entorno;
     [SerializeField] private bool enSuelo;
     [SerializeField] private Transform controladorSuelo;
@@ -31,17 +31,21 @@ public class MovimientoPlayer : MonoBehaviour
     public float fuerzaSaltoPared = 3f;
     [SerializeField] private Vector2 dimensionesCajaP;
     public float longitudDeteccion;
-    public float fuerzaHorSalto ;
+    public float fuerzaHorSalto;
     public Transform puntoDeteccionDerecha;
     public Transform puntoDeteccionIzquierda;
+    bool xD = false;
+    [SerializeField] float maxYVelocity = 0.2f;
+    private bool tocandoPared;
 
     [Header("Dash")]
     public float DashCooldown;
     public float dashForce = 20;
-    bool canDash, isDashing;
+    bool canDash, isDashing = false;
     float dashingTime = 0.2f;
 
-    bool xD = false;
+
+
 
     void Start()
     {
@@ -53,19 +57,19 @@ public class MovimientoPlayer : MonoBehaviour
     void Update()
     {
         //MovimientoHorizontal
-        
+
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
-            estaCorriendo = !estaCorriendo; 
+            estaCorriendo = !estaCorriendo;
         }
-       
+
         if (estaCorriendo)
         {
-            velocidadActual = velocidadCorrer; 
+            velocidadActual = velocidadCorrer;
         }
         else
         {
-            velocidadActual = velocidadCaminar; 
+            velocidadActual = velocidadCaminar;
         }
 
         movX = Input.GetAxis("Horizontal");
@@ -78,13 +82,26 @@ public class MovimientoPlayer : MonoBehaviour
             velocidadActual = 0;
         }
 
-              enSuelo = Physics2D.OverlapBox(controladorSuelo.position, dimensionesCaja, 0f, entorno);
+        enSuelo = Physics2D.OverlapBox(controladorSuelo.position, dimensionesCaja, 0f, entorno);
 
+        if (EnParedR() && rb.linearVelocityY < 0 && movX > 0 || EnParedL() && rb.linearVelocityY < 0 && movX < 0)
+        {
+            rb.gravityScale = 0f;
+            rb.linearVelocityY = -0.1f;
+            transform.Translate(Vector3.down * 1 * Time.deltaTime);
 
-        rb.gravityScale = EnParedR() && rb.linearVelocityY < 0 || EnParedL() && rb.linearVelocityY < 0 ? 0.1f : 1;
+            tocandoPared = true;
 
+        }
+        else
+        {
+            rb.gravityScale = 1;
+            tocandoPared = false;
+        }
 
-        if (enSuelo && Input.GetKeyDown(KeyCode.Space) )
+        rb.linearVelocityY = Mathf.Clamp(rb.linearVelocityY, -6, maxYVelocity);
+
+        if (enSuelo && Input.GetKeyDown(KeyCode.Space))
         {
             rb.AddForce(new Vector2(0f, fuerzaSalto), ForceMode2D.Impulse);
 
@@ -162,7 +179,7 @@ public class MovimientoPlayer : MonoBehaviour
     {
         return transform.eulerAngles.y == 0;
     }
-   
+
     private void GirarE()
     {
         Vector3 rotacion = transform.eulerAngles;
@@ -173,7 +190,7 @@ public class MovimientoPlayer : MonoBehaviour
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireCube(controladorSuelo.position, dimensionesCaja);
-       
+
         Gizmos.color = Color.blue;
         Vector2 rightOrigin = (Vector2)transform.position + Vector2.right * (dimensionesCajaP.x / 2 + longitudDeteccion);
         Gizmos.DrawWireCube(rightOrigin, dimensionesCajaP);
@@ -186,7 +203,9 @@ public class MovimientoPlayer : MonoBehaviour
     {
         animator.SetFloat(STRING_VELOCIDAD_HORIZONTAL, Mathf.Abs(rb.linearVelocity.x));
         animator.SetBool("Caminar", !estaCorriendo);
-        animator.SetBool("Dash",canDash);
+        animator.SetBool("Dash", isDashing);
+        animator.SetBool("EnPared",tocandoPared);
+
 
 
     }
