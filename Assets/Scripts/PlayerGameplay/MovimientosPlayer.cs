@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 
 public class MovimientoPlayer : MonoBehaviour
 {
-    private const string STRING_VELOCIDAD_HORIZONTAL = "VelocidadHorizontal";
+    
     [Header("Referencia")]
     public Rigidbody2D rb;
     [SerializeField] private Animator animator;
@@ -201,7 +201,7 @@ public class MovimientoPlayer : MonoBehaviour
     }
     private void ControladorAnimaciones()
     {
-        animator.SetFloat(STRING_VELOCIDAD_HORIZONTAL, Mathf.Abs(rb.linearVelocity.x));
+        animator.SetFloat("VelocidadHorizontal", Mathf.Abs(rb.linearVelocity.x));
         animator.SetBool("Caminar", !estaCorriendo);
         animator.SetBool("Dash", isDashing);
         animator.SetBool("EnPared",tocandoPared);

@@ -18,11 +18,11 @@ public class EnemiControlador : MonoBehaviour
 
     private void Update()
     {
-        if(transform.position != waypoints[waypointActual].position)
+        if (transform.position != waypoints[waypointActual].position)
         {
-            transform.position = Vector2.MoveTowards(transform.position, waypoints[waypointActual].position,speed * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, waypoints[waypointActual].position, speed * Time.deltaTime);
         }
-        else if(!estaEsperando)
+        else if (!estaEsperando)
         {
             StartCoroutine(wait());
         }

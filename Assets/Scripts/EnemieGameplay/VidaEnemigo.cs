@@ -1,16 +1,26 @@
+using System;
 using UnityEngine;
 
 public class VidaEnemigo : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private int vidaMaxima;
+    [SerializeField] private int vidaActual;
+    private void Awake()
     {
-        
+        vidaActual = vidaMaxima; 
     }
-
-    // Update is called once per frame
-    void Update()
+    public void TomarDaño(int cantidadDaño)
     {
+        int cantidadDeVidaTemporal = vidaActual - cantidadDaño;
         
+        cantidadDeVidaTemporal = Mathf.Clamp(cantidadDeVidaTemporal, 0, vidaMaxima);
+
+        vidaActual = cantidadDeVidaTemporal;
+
+        if (vidaActual ==0 )
+        {
+            Destroy(gameObject);
+        }
+
     }
 }
