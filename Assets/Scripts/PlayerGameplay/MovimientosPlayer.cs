@@ -106,6 +106,7 @@ public class MovimientoPlayer : MonoBehaviour
         if (movX != 0)
         {
             rb.linearVelocity = new Vector2(xD ? rb.linearVelocity.x : velocidadActual, rb.linearVelocity.y);
+            Debug.Log(velocidadActual);
         }
     }
 

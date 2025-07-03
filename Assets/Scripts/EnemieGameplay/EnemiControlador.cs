@@ -5,6 +5,7 @@ public class EnemiControlador : MonoBehaviour
 {
     [Header("Referencias")]
     [SerializeField] private Animator animator;
+    [SerializeField] private AtaqueEnemigo ataque;
     private Rigidbody2D rb;
 
     [Header("Patrullaje")]
@@ -58,7 +59,8 @@ public class EnemiControlador : MonoBehaviour
         if (Vector2.Distance(transform.position, destino) > 0.1f)
         {
             transform.position = Vector2.MoveTowards(transform.position, destino, speed * Time.deltaTime);
-            GirarHacia(waypoints[waypointActual].position);
+            if (!ataque.Atacando)
+                GirarHacia(waypoints[waypointActual].position);
             estaEsperando = false;
         }
         else if (!estaEsperando)

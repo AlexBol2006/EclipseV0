@@ -15,7 +15,7 @@ public class VidaEnemigo : MonoBehaviour
     private void Awake()
     {
         vidaActual = vidaMaxima;
-
+            
         // Si no se asignó desde el inspector, lo busca automáticamente
         if (animator == null)
         {

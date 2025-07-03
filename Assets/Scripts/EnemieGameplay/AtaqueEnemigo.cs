@@ -13,6 +13,7 @@ public class AtaqueEnemigo : MonoBehaviour
 
     private float tiempoUltimoAtaque;
     private EnemiControlador controlador;
+    public bool Atacando=false;
 
     private void Start()
     {
@@ -43,8 +44,13 @@ public class AtaqueEnemigo : MonoBehaviour
     {
         animator.SetTrigger("Atacar");
         tiempoUltimoAtaque = Time.time;
-
+        Atacando = true;
         // El daño se aplica luego desde el evento en la animación con: AnimEvent → AplicarDaño()
+    }
+
+    private void DejarAtacar()
+    {
+        Atacando = false;
     }
 
     // Llamada desde el evento de animación
