@@ -1,30 +1,34 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Proyectil : MonoBehaviour
 {
-    [SerializeField] private float velocidad ;
-    [SerializeField] private int da�o ;
     private Vector2 direccion;
+    private int daño;
+    public float velocidad = 10f;
+    public float tiempoVida = 5f;
 
-    public void Inicializar(Vector2 direccionLanzamiento, int da�oEntrada)
+    public void Inicializar(Vector2 direccion, int daño)
     {
-        direccion = direccionLanzamiento.normalized;
-        da�o = da�oEntrada;
-        Destroy(gameObject, 5f); // Se destruye si no impacta en 5s
+        this.direccion = direccion.normalized;
+        this.daño = daño;
+        Destroy(gameObject, tiempoVida);
     }
 
-    void Update()
+    private void Update()
     {
-        transform.Translate(direccion * 10f * Time.deltaTime);
+        transform.Translate(direccion * velocidad * Time.deltaTime);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.TryGetComponent(out VidaEnemigo enemigo))
         {
-            enemigo.TomarDa�o(da�o);
+            enemigo.TomarDaño(daño);
+            Destroy(gameObject);
         }
-
-        Destroy(gameObject);
+        else if (!collision.CompareTag("Player"))
+        {
+            Destroy(gameObject);
+        }
     }
 }

@@ -3,8 +3,8 @@
 public class HInvisibilidad : MonoBehaviour
 {
     [Header("Invisibilidad")]
-    [SerializeField] private float duracionInvisibilidad ;
-    [SerializeField] private float cooldownInvisibilidad ;
+    [SerializeField] private float duracionInvisibilidad;
+    [SerializeField] private float cooldownInvisibilidad;
 
     private float tiempoUltimoUso;
     private bool esInvisible = false;
@@ -59,7 +59,7 @@ public class HInvisibilidad : MonoBehaviour
         // Visual (normal)
         sr.color = new Color(1, 1, 1, 1f);
 
-       
+
 
         if (vidaJugador != null)
             vidaJugador.ActivarInvulnerabilidad(false);

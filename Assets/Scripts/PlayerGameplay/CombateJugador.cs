@@ -17,13 +17,13 @@ public class CombateJugador : MonoBehaviour
     [SerializeField] private GameObject prefabProyectil;
     [SerializeField] private Transform puntoDisparo;
     [SerializeField] private int dañoProyectil;
-    [SerializeField] private int maxProyectilesTotales ;
+    [SerializeField] private int maxProyectilesTotales;
 
     [Header("Cooldown Lanzables")]
-    [SerializeField] private int proyectilesAntesCooldown ;
-    [SerializeField] private float tiempoCooldownLanzables ;
+    [SerializeField] private int proyectilesAntesCooldown;
+    [SerializeField] private float tiempoCooldownLanzables;
 
-    private int proyectilesLanzadosTotales ;
+    private int proyectilesLanzadosTotales;
     private int proyectilesLanzadosEnRonda;
     private bool enCooldownLanzables = false;
 
@@ -36,7 +36,7 @@ public class CombateJugador : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            LanzarProyectil();
+            IntentarAnimacionLanzar();
         }
     }
 
@@ -63,19 +63,21 @@ public class CombateJugador : MonoBehaviour
         }
     }
 
-    private void LanzarProyectil()
+    private void IntentarAnimacionLanzar()
     {
-        if (enCooldownLanzables)
+        if (enCooldownLanzables || proyectilesLanzadosTotales >= maxProyectilesTotales)
         {
-            Debug.Log("Esperando cooldown para volver a lanzar proyectiles...");
+            Debug.Log("No puedes lanzar: cooldown o sin proyectiles.");
             return;
         }
 
-        if (proyectilesLanzadosTotales >= maxProyectilesTotales)
-        {
-            Debug.Log("¡Ya lanzaste todos los proyectiles disponibles!");
+        animator.SetTrigger("Lanzar");
+    }
+
+    public void LanzarProyectilEvento()
+    {
+        if (enCooldownLanzables || proyectilesLanzadosTotales >= maxProyectilesTotales)
             return;
-        }
 
         GameObject proyectil = Instantiate(prefabProyectil, puntoDisparo.position, Quaternion.identity);
         Vector2 direccion = transform.right * Mathf.Sign(transform.localScale.x);
@@ -105,15 +107,15 @@ public class CombateJugador : MonoBehaviour
     private IEnumerator CooldownLanzables()
     {
         enCooldownLanzables = true;
-        Debug.Log("Esperando " + tiempoCooldownLanzables + " segundos de cooldown...");
+        Debug.Log("Cooldown: " + tiempoCooldownLanzables + "s...");
         yield return new WaitForSeconds(tiempoCooldownLanzables);
 
         proyectilesLanzadosEnRonda = 0;
-        proyectilesLanzadosTotales = 0; // ✅ Resetea proyectiles disponibles
+        proyectilesLanzadosTotales = 0;
         enCooldownLanzables = false;
-
-        Debug.Log("Cooldown finalizado. Puedes lanzar nuevamente.");
+        Debug.Log("Puedes lanzar nuevamente.");
     }
+
     public void RecargarProyectiles()
     {
         proyectilesLanzadosTotales = 0;

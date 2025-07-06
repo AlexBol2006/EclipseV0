@@ -540,9 +540,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 277983012}
-  velocidadx: 5
+  animator: {fileID: 0}
+  velocidadCaminar: 0
+  velocidadCorrer: 0
+  puedeMoverse: 1
   fuerzaSalto: 7.61
-  fuerzaHorSalto: 5
   entorno:
     serializedVersion: 2
     m_Bits: 8
@@ -550,9 +552,12 @@ MonoBehaviour:
   controladorSuelo: {fileID: 122141647}
   dimensionesCaja: {x: 0.86, y: 0.33}
   fuerzaSaltoPared: 7.2
-  longitudRaycast: 0.55
+  dimensionesCajaP: {x: 0.2, y: 1}
+  pivoteLaterales: {fileID: 0}
+  maxYlinearVelocity: 0.2
+  longitudDeteccion: 0
+  fuerzaHorSalto: 5
   DashCooldown: 0.99
-  dashParticle: {fileID: 3822100202604417909, guid: 2da98cbbf9945a6488e598ec389b346e, type: 3}
   dashForce: 15
 --- !u!1 &311354195
 GameObject:
@@ -1223,14 +1228,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acee7b391a4105141ae9cb7b679011e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocidadMovimientoEBase: 2
-  velocidadMovimientoEActual: 2
-  controladorFrente: {fileID: 553729077}
-  distanciaRaycast: 1
-  capaSuelo:
+  animator: {fileID: 0}
+  ataque: {fileID: 0}
+  waypoints: []
+  speed: 0
+  tiempoEspera: 0
+  jugador: {fileID: 0}
+  speedPersecucion: 0
+  distanciaDetenerse: 0
+  "tama\xF1oDeteccion": {x: 4, y: 2}
+  capaJugador:
     serializedVersion: 2
-    m_Bits: 8
-  tocandoSueloFrente: 0
+    m_Bits: 0
 --- !u!61 &1439209764
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1395,7 +1404,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 2094276825
-  m_SortingLayer: 2
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 421ac449e916cb146ab58f58666b35b0, type: 3}
   m_Color: {r: 0.96981126, g: 0.40073332, b: 0.40073332, a: 1}
@@ -1589,7 +1598,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -611215299
-  m_SortingLayer: 1
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 421ac449e916cb146ab58f58666b35b0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

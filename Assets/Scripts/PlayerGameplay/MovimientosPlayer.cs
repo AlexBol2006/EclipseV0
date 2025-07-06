@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 
 public class MovimientoPlayer : MonoBehaviour
@@ -28,7 +28,7 @@ public class MovimientoPlayer : MonoBehaviour
     [SerializeField] float maxYlinearVelocity = 0.2f;
     public float longitudDeteccion;
     public float fuerzaHorSalto;
-    
+
     private bool xD = false;
 
     [Header("Dash")]
@@ -65,7 +65,7 @@ public class MovimientoPlayer : MonoBehaviour
         {
             rb.gravityScale = 0f;
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, -0.5f);
-         
+
             estaResbalando = true;
         }
         else
@@ -187,7 +187,7 @@ public class MovimientoPlayer : MonoBehaviour
 
     private void ControladorAnimaciones(bool resbalando)
     {
-        animator.SetFloat("VelocidadHorizontal", Mathf.Abs(rb.linearVelocity.x));
+        animator.SetFloat("Velocidad", Mathf.Abs(rb.linearVelocity.x));
         animator.SetBool("Caminar", !estaCorriendo);
         animator.SetBool("Dash", isDashing);
         animator.SetBool("Resbalando", resbalando);

@@ -133,7 +133,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2540397958869624721}
-  - component: {fileID: 1285422410913432351}
   - component: {fileID: 7334655602535693551}
   - component: {fileID: 5684551162577550674}
   - component: {fileID: 4208591356603562157}
@@ -167,52 +166,6 @@ Transform:
   - {fileID: 1865768117353199404}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &1285422410913432351
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6878416324515546318}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 6200000, guid: 3f6dc55d6ca89b84f848e9a7e93351de, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0.022200584, y: -0.0030674934}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.22, y: 0.36}
-    newSize: {x: 0.22, y: 0.36}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 0.17380333, y: 0.3475318}
-  m_EdgeRadius: 0
 --- !u!50 &7334655602535693551
 Rigidbody2D:
   serializedVersion: 5
@@ -225,7 +178,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 1
-  m_Mass: 0.11068283
+  m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 1
@@ -256,6 +209,7 @@ MonoBehaviour:
   animator: {fileID: 119418079613505258}
   velocidadCaminar: 2
   velocidadCorrer: 4
+  puedeMoverse: 1
   fuerzaSalto: 1
   entorno:
     serializedVersion: 2
@@ -292,6 +246,8 @@ MonoBehaviour:
   puntoDisparo: {fileID: 1865768117353199404}
   "da\xF1oProyectil": 5
   maxProyectilesTotales: 6
+  proyectilesAntesCooldown: 0
+  tiempoCooldownLanzables: 0
 --- !u!114 &4448143173155855662
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -304,6 +260,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 466b83dd561561f4bbcb74ff3470fae9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  usosCuracionMaximos: 0
   vidaMaxima: 100
   vidaActual: 0
 --- !u!114 &1672558802008664581
@@ -386,7 +343,7 @@ SpriteRenderer:
   m_SortingLayerID: -222639497
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 815424164945274260, guid: 0e5be51841a952e4d8b3b8eed6f6c1fc, type: 3}
+  m_Sprite: {fileID: 815424164945274260, guid: 2bf816520d000e248a8bf7f9171bd3fd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
