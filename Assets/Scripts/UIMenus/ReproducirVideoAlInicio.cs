@@ -1,35 +1,45 @@
 using UnityEngine;
 using UnityEngine.Video;
-using System.Collections;
+using UnityEngine.SceneManagement;
 
-public class ReproducirVideoAlInicio : MonoBehaviour
+public class IntroVideoManager : MonoBehaviour
 {
-    public VideoPlayer videoPlayer;
+    [Header("Elementos asignables")]
+    public VideoPlayer videoPlayer;        // El componente VideoPlayer
+    public GameObject videoScreen;         // El Raw Image que muestra el video
+    public GameObject menuUI;              // El panel del menú
+    public string nombreEscenaGameplay;    // Nombre exacto de la escena de gameplay
 
-    private void Start()
+    private bool videoIniciado = false;
+
+    public void ReproducirVideoYComenzar()
     {
-        StartCoroutine(ReproducirVideo());
+        if (videoIniciado) return;
+
+        videoIniciado = true;
+        menuUI.SetActive(false);               // Ocultar el menú
+        videoScreen.SetActive(true);           // Mostrar el video
+        videoPlayer.loopPointReached += VideoTerminado;
+        videoPlayer.Play();
     }
 
-    private IEnumerator ReproducirVideo()
+    void Update()
     {
-        Time.timeScale = 0f; // Congela el juego
-
-        videoPlayer.Play();
-
-        // Esperar hasta que termine el video o se presione cualquier tecla o clic
-        while (videoPlayer.isPlaying)
+        if (videoIniciado && Input.GetKeyDown(KeyCode.Space))
         {
-            if (Input.anyKeyDown || Input.GetMouseButtonDown(0))
-            {
-                videoPlayer.Stop();
-                break;
-            }
-
-            yield return null;
+            videoPlayer.Stop();
+            CargarEscena();
         }
+    }
 
-        videoPlayer.gameObject.SetActive(false);
-        Time.timeScale = 1f; // Reactiva el juego
+    void VideoTerminado(VideoPlayer vp)
+    {
+        CargarEscena();
+    }
+
+    void CargarEscena()
+    {
+        videoScreen.SetActive(false);         // Ocultar la pantalla de video
+        SceneManager.LoadScene(nombreEscenaGameplay);
     }
 }
