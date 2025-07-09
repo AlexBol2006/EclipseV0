@@ -39,6 +39,12 @@ public class EnemiControlador : MonoBehaviour
 
         if (jugadorDetectado == null || JugadorEsInvisible(jugadorDetectado))
         {
+            if (jugador != null)
+            {
+                jugador = null; // 🟡 Solo lo hace al perderlo
+                GirarHacia(waypoints[waypointActual].position); // 🟡 Reorientar al waypoint actual
+            }
+
             Patrullar();
         }
         else
@@ -59,8 +65,10 @@ public class EnemiControlador : MonoBehaviour
         if (Vector2.Distance(transform.position, destino) > 0.1f)
         {
             transform.position = Vector2.MoveTowards(transform.position, destino, speed * Time.deltaTime);
+
             if (!ataque.Atacando)
                 GirarHacia(waypoints[waypointActual].position);
+
             estaEsperando = false;
         }
         else if (!estaEsperando)

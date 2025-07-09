@@ -10,6 +10,7 @@ public class VidaJugador : MonoBehaviour
     [SerializeField] private int vidaMaxima;
     [SerializeField] private int vidaActual;
     private bool esInvulnerable = false;
+    private bool estaMuerto = false;
 
     [Header("Referencias")]
     [SerializeField] private Animator animator;
@@ -30,6 +31,8 @@ public class VidaJugador : MonoBehaviour
 
     private void Update()
     {
+        if (estaMuerto) return;
+
         if (barraDeVIdaUI != null)
             barraDeVIdaUI.CambiarBarraDeVida(vidaActual);
 
@@ -39,7 +42,7 @@ public class VidaJugador : MonoBehaviour
 
     public void TomarDaño(int daño)
     {
-        if (esInvulnerable) return;
+        if (esInvulnerable || estaMuerto) return;
 
         vidaActual -= daño;
         vidaActual = Mathf.Clamp(vidaActual, 0, vidaMaxima);
@@ -60,40 +63,39 @@ public class VidaJugador : MonoBehaviour
 
     public void Morir()
     {
+        if (estaMuerto) return;
+
+        estaMuerto = true;
+
         if (animator != null)
             animator.SetTrigger("Morir");
-        // 🔄 Esperamos evento "FinAnimacionMuerte" para revivir
     }
 
-    // 🔄 Este método debe ser llamado desde el evento en la animación "Morir"
-    public void FinAnimacionMuerte()
+    // Este método se llama desde el evento en la animación "Muerte"
+    public void EventoFinAnimacionMuerte()
     {
         transform.position = ControladorJuego.instance.ObtenerCheckpoint();
 
         vidaActual = vidaMaxima;
         usosCuracionRestantes = usosCuracionMaximos;
+        estaMuerto = false;
 
         if (uiCuraciones != null)
             uiCuraciones.ActualizarUI(usosCuracionRestantes);
+
+        if (barraDeVIdaUI != null)
+            barraDeVIdaUI.CambiarBarraDeVida(vidaActual);
 
         GetComponent<CombateJugador>()?.RecargarProyectiles();
 
-        // Opcional: disparar trigger para animación de revivir si la tienes
-        // animator.SetTrigger("Revivir");
+        // ✅ Forzar estado "Movimiento" del Blend Tree
+        if (animator != null)
+            animator.Play("Movimiento");
     }
 
-    public void RestaurarVidaTotal()
-    {
-        vidaActual = vidaMaxima;
-    }
 
-    public void ResetearCuraciones()
-    {
-        usosCuracionRestantes = usosCuracionMaximos;
 
-        if (uiCuraciones != null)
-            uiCuraciones.ActualizarUI(usosCuracionRestantes);
-    }
+    public bool EstaMuerto() => estaMuerto;
 
     private void IntentarCurar()
     {
@@ -117,8 +119,6 @@ public class VidaJugador : MonoBehaviour
         if (uiCuraciones != null)
             uiCuraciones.ActualizarUI(usosCuracionRestantes);
 
-        Debug.Log($"Curado +{vidaPorCurar}. Usos restantes: {usosCuracionRestantes}");
-
         StartCoroutine(FinCuracion());
     }
 
@@ -141,9 +141,21 @@ public class VidaJugador : MonoBehaviour
             movimiento.congelado = false;
     }
 
+    public void RestaurarVidaTotal()
+    {
+        vidaActual = vidaMaxima;
+    }
+
+    public void ResetearCuraciones()
+    {
+        usosCuracionRestantes = usosCuracionMaximos;
+
+        if (uiCuraciones != null)
+            uiCuraciones.ActualizarUI(usosCuracionRestantes);
+    }
+
     public void ReiniciarDesdeCheckpoint()
     {
-        Vector2 posicion = ControladorJuego.instance.ObtenerCheckpoint();
-        transform.position = posicion;
+        transform.position = ControladorJuego.instance.ObtenerCheckpoint();
     }
 }

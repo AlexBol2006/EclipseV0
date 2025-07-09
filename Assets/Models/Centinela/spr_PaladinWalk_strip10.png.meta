@@ -1,34 +1,37 @@
 fileFormatVersion: 2
-guid: 26cab0d39f2f6e247861a51eb1d964ea
+guid: 853cdcbbfaf20fd4789e88914575ff7f
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1745646317731160461
-    second: DEATH_0
+      213: 6192038765228248838
+    second: spr_PaladinWalk_strip10_0
   - first:
-      213: -1962882971833571424
-    second: DEATH_1
+      213: 6031083225522680546
+    second: spr_PaladinWalk_strip10_1
   - first:
-      213: 7163519229324203079
-    second: DEATH_2
+      213: 5515782898148204764
+    second: spr_PaladinWalk_strip10_2
   - first:
-      213: -2824850348822682002
-    second: DEATH_3
+      213: 4882305682784799698
+    second: spr_PaladinWalk_strip10_3
   - first:
-      213: -4395442915117589123
-    second: DEATH_4
+      213: -2564351781743491486
+    second: spr_PaladinWalk_strip10_4
   - first:
-      213: 7527047216810660112
-    second: DEATH_5
+      213: 5256672864688634832
+    second: spr_PaladinWalk_strip10_5
   - first:
-      213: -6116082883535636463
-    second: DEATH_6
+      213: 3407761274023799031
+    second: spr_PaladinWalk_strip10_6
   - first:
-      213: -5775218795824829258
-    second: DEATH_7
+      213: 7632484622376573522
+    second: spr_PaladinWalk_strip10_7
   - first:
-      213: -5608201998214337042
-    second: DEATH_8
+      213: -7910040888702806016
+    second: spr_PaladinWalk_strip10_8
+  - first:
+      213: 5175225417192995392
+    second: spr_PaladinWalk_strip10_9
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -121,19 +124,6 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
     buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -150,199 +140,221 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: DEATH_0
+      name: spr_PaladinWalk_strip10_0
       rect:
         serializedVersion: 2
-        x: 38
-        y: 14
-        width: 20
-        height: 35
+        x: 39
+        y: 61
+        width: 47
+        height: 42
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 37e5a204ce736c7e0800000000000000
-      internalID: -1745646317731160461
+      spriteID: 60fc0ec337a8ee550800000000000000
+      internalID: 6192038765228248838
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DEATH_1
+      name: spr_PaladinWalk_strip10_1
       rect:
         serializedVersion: 2
-        x: 138
-        y: 14
-        width: 17
-        height: 31
-      alignment: 9
-      pivot: {x: 0.5560895, y: 0.55121315}
+        x: 167
+        y: 61
+        width: 47
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0a76230465072c4e0800000000000000
-      internalID: -1962882971833571424
+      spriteID: 2e2b8145d36b2b350800000000000000
+      internalID: 6031083225522680546
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DEATH_2
+      name: spr_PaladinWalk_strip10_2
       rect:
         serializedVersion: 2
-        x: 234
-        y: 14
-        width: 18
-        height: 29
-      alignment: 9
-      pivot: {x: 0.53299034, y: 0.5708912}
+        x: 295
+        y: 61
+        width: 47
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7449c8df8cee96360800000000000000
-      internalID: 7163519229324203079
+      spriteID: cd06c4e625ffb8c40800000000000000
+      internalID: 5515782898148204764
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DEATH_3
-      rect:
-        serializedVersion: 2
-        x: 330
-        y: 14
-        width: 18
-        height: 29
-      alignment: 9
-      pivot: {x: 0.5566796, y: 0.5884804}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: e6629ce039d1cc8d0800000000000000
-      internalID: -2824850348822682002
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: DEATH_4
+      name: spr_PaladinWalk_strip10_3
       rect:
         serializedVersion: 2
         x: 426
-        y: 14
-        width: 18
-        height: 29
-      alignment: 9
-      pivot: {x: 0.53066677, y: 0.5731903}
+        y: 61
+        width: 43
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d7d98ede4ff3003c0800000000000000
-      internalID: -4395442915117589123
+      spriteID: 2db4243a62f61c340800000000000000
+      internalID: 4882305682784799698
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DEATH_5
+      name: spr_PaladinWalk_strip10_4
       rect:
         serializedVersion: 2
-        x: 519
-        y: 14
-        width: 32
-        height: 25
-      alignment: 9
-      pivot: {x: 0.48459053, y: 0.6628563}
+        x: 554
+        y: 61
+        width: 42
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 011979d4091757860800000000000000
-      internalID: 7527047216810660112
+      spriteID: 2660a0a14a7996cd0800000000000000
+      internalID: -2564351781743491486
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DEATH_6
+      name: spr_PaladinWalk_strip10_5
       rect:
         serializedVersion: 2
-        x: 617
-        y: 14
-        width: 38
-        height: 26
-      alignment: 9
-      pivot: {x: 0.49384028, y: 0.6350673}
+        x: 682
+        y: 61
+        width: 41
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 118f206950f4f1ba0800000000000000
-      internalID: -6116082883535636463
+      spriteID: 0db73309e1473f840800000000000000
+      internalID: 5256672864688634832
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DEATH_7
-      rect:
-        serializedVersion: 2
-        x: 713
-        y: 14
-        width: 38
-        height: 26
-      alignment: 9
-      pivot: {x: 0.5000016, y: 0.6440717}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 6bca3b68a1d4adfa0800000000000000
-      internalID: -5775218795824829258
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: DEATH_8
+      name: spr_PaladinWalk_strip10_6
       rect:
         serializedVersion: 2
         x: 810
-        y: 14
-        width: 37
-        height: 9
+        y: 61
+        width: 41
+        height: 41
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: eed6cc30ff9ab22b0800000000000000
-      internalID: -5608201998214337042
+      spriteID: 7f86589d2dcca4f20800000000000000
+      internalID: 3407761274023799031
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_PaladinWalk_strip10_7
+      rect:
+        serializedVersion: 2
+        x: 938
+        y: 61
+        width: 43
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 25a136e43580ce960800000000000000
+      internalID: 7632484622376573522
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_PaladinWalk_strip10_8
+      rect:
+        serializedVersion: 2
+        x: 1066
+        y: 61
+        width: 44
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 008dd0e88b3e93290800000000000000
+      internalID: -7910040888702806016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_PaladinWalk_strip10_9
+      rect:
+        serializedVersion: 2
+        x: 1192
+        y: 61
+        width: 47
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 04a7c50f81812d740800000000000000
+      internalID: 5175225417192995392
       vertices: []
       indices: 
       edges: []
@@ -351,7 +363,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 88add26581354b24bb094d7ef4624974
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -361,15 +373,16 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      DEATH_0: -1745646317731160461
-      DEATH_1: -1962882971833571424
-      DEATH_2: 7163519229324203079
-      DEATH_3: -2824850348822682002
-      DEATH_4: -4395442915117589123
-      DEATH_5: 7527047216810660112
-      DEATH_6: -6116082883535636463
-      DEATH_7: -5775218795824829258
-      DEATH_8: -5608201998214337042
+      spr_PaladinWalk_strip10_0: 6192038765228248838
+      spr_PaladinWalk_strip10_1: 6031083225522680546
+      spr_PaladinWalk_strip10_2: 5515782898148204764
+      spr_PaladinWalk_strip10_3: 4882305682784799698
+      spr_PaladinWalk_strip10_4: -2564351781743491486
+      spr_PaladinWalk_strip10_5: 5256672864688634832
+      spr_PaladinWalk_strip10_6: 3407761274023799031
+      spr_PaladinWalk_strip10_7: 7632484622376573522
+      spr_PaladinWalk_strip10_8: -7910040888702806016
+      spr_PaladinWalk_strip10_9: 5175225417192995392
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
