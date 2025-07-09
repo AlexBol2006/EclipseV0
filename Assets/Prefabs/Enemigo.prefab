@@ -32,7 +32,7 @@ Transform:
   m_GameObject: {fileID: 2737084531605938172}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.8, y: -4.33, z: 0}
+  m_LocalPosition: {x: -0.804, y: -4.412, z: 0}
   m_LocalScale: {x: 1.9222409, y: 1.9222409, z: 1.9222409}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -99,8 +99,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.0039385348, y: -0.0012333606}
-  m_Size: {x: 0.23534797, y: 0.40067697}
+  m_Offset: {x: -0.008316132, y: 0.00564567}
+  m_Size: {x: 0.20157787, y: 0.30937248}
   m_Direction: 0
 --- !u!114 &6928446338533347188
 MonoBehaviour:
@@ -119,11 +119,11 @@ MonoBehaviour:
   waypoints:
   - {fileID: 0}
   - {fileID: 0}
-  speed: 1
-  tiempoEspera: 2
+  speed: 1.5
+  tiempoEspera: 1
   jugador: {fileID: 0}
   speedPersecucion: 2
-  distanciaDetenerse: 0.64
+  distanciaDetenerse: 0.4
   "tama\xF1oDeteccion": {x: 4.32, y: 0.16}
   capaJugador:
     serializedVersion: 2
@@ -140,8 +140,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d54af579ed15ef048bbdd6f6c0e71a9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vidaMaxima: 50
-  vidaActual: 2
+  vidaMaxima: 9
+  vidaActual: 0
   animator: {fileID: 6345467860252624776}
   tiempoAntesDeDestruir: 1
 --- !u!114 &7861171249925506593
@@ -157,8 +157,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 6345467860252624776}
-  radioAtaque: 0.65
-  "da\xF1oAtaqueM": 15
+  radioAtaque: 0.55
+  "da\xF1oAtaqueM": 1
   tiempoEntreAtaques: 2
   capaJugador:
     serializedVersion: 2
@@ -208,7 +208,7 @@ SpriteRenderer:
   m_SortingLayerID: -1729407313
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 4723107735738678597, guid: 2165df702934d36479fa132977f659f1, type: 3}
+  m_Sprite: {fileID: 1509690687825009327, guid: 1c9024b6e9fb3d943ac4bb1ccb5f65ad, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

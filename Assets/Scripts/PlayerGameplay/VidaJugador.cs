@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class VidaJugador : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class VidaJugador : MonoBehaviour
 
     [Header("Referencias")]
     [SerializeField] private Animator animator;
-    [SerializeField] private UIConsumibleUnico uiCuraciones; // Nueva referencia a la UI de curación con una sola imagen
+    [SerializeField] private UIConsumibleUnico uiCuraciones;
     [SerializeField] private BarraDeVIdaUI barraDeVIdaUI;
 
     private void Awake()
@@ -23,7 +24,6 @@ public class VidaJugador : MonoBehaviour
         if (barraDeVIdaUI != null)
             barraDeVIdaUI.InicairBarraDeVida(vidaMaxima, vidaActual);
 
-        // Actualiza la UI al comenzar
         if (uiCuraciones != null)
             uiCuraciones.ActualizarUI(usosCuracionRestantes);
     }
@@ -34,9 +34,7 @@ public class VidaJugador : MonoBehaviour
             barraDeVIdaUI.CambiarBarraDeVida(vidaActual);
 
         if (Input.GetKeyDown(KeyCode.Tab))
-        {
             IntentarCurar();
-        }
     }
 
     public void TomarDaño(int daño)
@@ -64,19 +62,24 @@ public class VidaJugador : MonoBehaviour
     {
         if (animator != null)
             animator.SetTrigger("Morir");
+        // 🔄 Esperamos evento "FinAnimacionMuerte" para revivir
+    }
 
+    // 🔄 Este método debe ser llamado desde el evento en la animación "Morir"
+    public void FinAnimacionMuerte()
+    {
         transform.position = ControladorJuego.instance.ObtenerCheckpoint();
+
         vidaActual = vidaMaxima;
         usosCuracionRestantes = usosCuracionMaximos;
 
         if (uiCuraciones != null)
             uiCuraciones.ActualizarUI(usosCuracionRestantes);
 
-        CombateJugador combate = GetComponent<CombateJugador>();
-        if (combate != null)
-        {
-            combate.RecargarProyectiles();
-        }
+        GetComponent<CombateJugador>()?.RecargarProyectiles();
+
+        // Opcional: disparar trigger para animación de revivir si la tienes
+        // animator.SetTrigger("Revivir");
     }
 
     public void RestaurarVidaTotal()
@@ -100,6 +103,10 @@ public class VidaJugador : MonoBehaviour
             return;
         }
 
+        MovimientoPlayer movimiento = GetComponent<MovimientoPlayer>();
+        if (movimiento != null)
+            movimiento.congelado = true;
+
         int vidaPorCurar = Mathf.RoundToInt(vidaMaxima * 0.7f);
         vidaActual = Mathf.Clamp(vidaActual + vidaPorCurar, 0, vidaMaxima);
         usosCuracionRestantes--;
@@ -111,6 +118,27 @@ public class VidaJugador : MonoBehaviour
             uiCuraciones.ActualizarUI(usosCuracionRestantes);
 
         Debug.Log($"Curado +{vidaPorCurar}. Usos restantes: {usosCuracionRestantes}");
+
+        StartCoroutine(FinCuracion());
+    }
+
+    private IEnumerator FinCuracion()
+    {
+        yield return new WaitForSeconds(1f);
+
+        MovimientoPlayer movimiento = GetComponent<MovimientoPlayer>();
+        if (movimiento != null)
+        {
+            movimiento.congelado = false;
+            movimiento.ForzarMovimientoTrasCuracion();
+        }
+    }
+
+    public void FinAnimacionCurar()
+    {
+        MovimientoPlayer movimiento = GetComponent<MovimientoPlayer>();
+        if (movimiento != null)
+            movimiento.congelado = false;
     }
 
     public void ReiniciarDesdeCheckpoint()

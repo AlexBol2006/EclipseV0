@@ -1,87 +1,82 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class HInvisibilidad : MonoBehaviour
 {
     [Header("Invisibilidad")]
-    [SerializeField] private float duracionInvisibilidad;
-    [SerializeField] private float cooldownInvisibilidad;
+    [SerializeField] private float duracionInvisibilidad = 3f;
+    [SerializeField] private float cooldownInvisibilidad = 5f;
 
+    [Header("Transparencia")]
+    [Range(0f, 1f)]
+    [SerializeField] private float nivelTransparencia = 0.3f;
+    [SerializeField] private SpriteRenderer cuerpoSprite;
+
+    private bool estaInvisible = false;
     private float tiempoUltimoUso;
-    private bool esInvisible = false;
-    private SpriteRenderer sr;
-    private VidaJugador vidaJugador; // Referencia para invulnerabilidad si la usas
-    private EnemiControlador[] enemigos; // Solo si quieres que los enemigos ignoren al jugador
+    private MovimientoPlayer movimiento;
+    private Color colorOriginal;
 
-    void Start()
+    private void Start()
     {
-        sr = GetComponent<SpriteRenderer>();
-        vidaJugador = GetComponent<VidaJugador>();
-        enemigos = Object.FindObjectsByType<EnemiControlador>(FindObjectsSortMode.None);
+        movimiento = GetComponent<MovimientoPlayer>();
 
-        tiempoUltimoUso = -cooldownInvisibilidad;
+        // Obtener el SpriteRenderer si no se asignó manualmente
+        if (cuerpoSprite == null)
+            cuerpoSprite = GetComponent<SpriteRenderer>();
 
+        if (cuerpoSprite != null)
+            colorOriginal = cuerpoSprite.color;
     }
 
-    void Update()
+    public void IntentarActivarInvisibilidad()
     {
+        if (estaInvisible || Time.time < tiempoUltimoUso + cooldownInvisibilidad)
+            return;
 
-        if (Input.GetKeyDown(KeyCode.F) && Time.time >= tiempoUltimoUso + cooldownInvisibilidad)
-        {
-            ActivarInvisibilidad();
-        }
-
-        // Interrupciones (agrega tus condiciones específicas aquí)
-        if (esInvisible && (EstáAtacando() || EstáLanzando() || EstáHaciendoDash()))
-        {
-            CancelarInvisibilidad();
-        }
+        ActivarInvisibilidad();
     }
 
     private void ActivarInvisibilidad()
     {
-        esInvisible = true;
+        estaInvisible = true;
         tiempoUltimoUso = Time.time;
 
-        sr.color = new Color(1, 1, 1, 0.4f);
+        if (cuerpoSprite != null)
+        {
+            Color c = cuerpoSprite.color;
+            c.a = nivelTransparencia;
+            cuerpoSprite.color = c;
+        }
 
-        if (vidaJugador != null)
-            vidaJugador.ActivarInvulnerabilidad(true);
+        StartCoroutine(DesactivarDespuesDeTiempo());
+    }
 
-        Invoke(nameof(CancelarInvisibilidad), duracionInvisibilidad);
+    private IEnumerator DesactivarDespuesDeTiempo()
+    {
+        yield return new WaitForSeconds(duracionInvisibilidad);
+        CancelarInvisibilidad();
     }
 
     public void CancelarInvisibilidad()
     {
-        if (!esInvisible) return;
+        if (!estaInvisible) return;
 
-        esInvisible = false;
+        estaInvisible = false;
 
-        // Visual (normal)
-        sr.color = new Color(1, 1, 1, 1f);
+        if (cuerpoSprite != null)
+        {
+            Color c = cuerpoSprite.color;
+            c.a = colorOriginal.a;
+            cuerpoSprite.color = c;
+        }
 
-
-
-        if (vidaJugador != null)
-            vidaJugador.ActivarInvulnerabilidad(false);
-    }
-    public bool EstaInvisible()
-    {
-        return esInvisible;
+        if (movimiento != null)
+            movimiento.ForzarCorrer();
     }
 
-    // Puedes reemplazar estos con tus propias condiciones
-    private bool EstáAtacando()
-    {
-        return Input.GetKey(KeyCode.Mouse0);
-    }
-
-    private bool EstáLanzando()
-    {
-        return Input.GetKey(KeyCode.Q);
-    }
-
-    private bool EstáHaciendoDash()
-    {
-        return Input.GetKey(KeyCode.LeftShift); // O tu tecla real de dash
-    }
+    public bool EstaInvisible() => estaInvisible;
+    public bool PuedeActivar() => Time.time >= tiempoUltimoUso + cooldownInvisibilidad;
+    public float GetUltimoUso() => tiempoUltimoUso;
+    public float GetCooldown() => cooldownInvisibilidad;
 }

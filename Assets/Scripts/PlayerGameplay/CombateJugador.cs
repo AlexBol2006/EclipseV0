@@ -5,23 +5,24 @@ public class CombateJugador : MonoBehaviour
 {
     [Header("Daño Cuerpo a Cuerpo")]
     [SerializeField] private Transform controladorAtaque;
-    [SerializeField] private float radioAtaque;
-    [SerializeField] private int dañoAtaqueM;
-    [SerializeField] private float tiempoEntreAtaques;
-    private float tiempoUltimoAtaques;
+    [SerializeField] private float radioAtaque = 1f;
+    [SerializeField] private int dañoAtaqueM = 1;
+    [SerializeField] private float tiempoEntreAtaques = 0.5f;
+    private float tiempoUltimoAtaque;
 
     [Header("Referencias")]
     [SerializeField] private Animator animator;
+    [SerializeField] private MovimientoPlayer movimientoJugador;
 
     [Header("Daño Lanzable")]
     [SerializeField] private GameObject prefabProyectil;
     [SerializeField] private Transform puntoDisparo;
-    [SerializeField] private int dañoProyectil;
-    [SerializeField] private int maxProyectilesTotales;
+    [SerializeField] private int dañoProyectil = 1;
+    [SerializeField] private int maxProyectilesTotales = 5;
 
     [Header("Cooldown Lanzables")]
-    [SerializeField] private int proyectilesAntesCooldown;
-    [SerializeField] private float tiempoCooldownLanzables;
+    [SerializeField] private int proyectilesAntesCooldown = 3;
+    [SerializeField] private float tiempoCooldownLanzables = 3f;
 
     private int proyectilesLanzadosTotales;
     private int proyectilesLanzadosEnRonda;
@@ -42,25 +43,42 @@ public class CombateJugador : MonoBehaviour
 
     private void IntentarAtacar()
     {
-        if (Time.time < tiempoUltimoAtaques + tiempoEntreAtaques)
-            return;
+        if (Time.time < tiempoUltimoAtaque + tiempoEntreAtaques) return;
+        if (movimientoJugador == null) return;
+
+        if (movimientoJugador.EstaDasheando()) return;
+        if (!movimientoJugador.PuedeAtacarCuerpoACuerpo()) return;
 
         Atacar();
     }
 
     private void Atacar()
     {
-        animator.SetTrigger("Atacar");
-        tiempoUltimoAtaques = Time.time;
+        movimientoJugador.InterrumpirDash();
+        movimientoJugador.congelado = true;
 
-        Collider2D[] objetosTocados = Physics2D.OverlapCircleAll(controladorAtaque.position, radioAtaque);
-        foreach (Collider2D objeto in objetosTocados)
+        animator.SetTrigger("Atacar");
+        tiempoUltimoAtaque = Time.time;
+
+        Collider2D[] enemigos = Physics2D.OverlapCircleAll(controladorAtaque.position, radioAtaque);
+        foreach (Collider2D enemigo in enemigos)
         {
-            if (objeto.TryGetComponent(out VidaEnemigo vidaEnemigo))
+            if (enemigo.TryGetComponent(out VidaEnemigo vida))
             {
-                vidaEnemigo.TomarDaño(dañoAtaqueM);
+                vida.TomarDaño(dañoAtaqueM);
             }
         }
+
+        if (TryGetComponent(out HInvisibilidad invisibilidad) && invisibilidad.EstaInvisible())
+        {
+            invisibilidad.CancelarInvisibilidad();
+        }
+    }
+
+    public void FinalizarAtaque()
+    {
+        if (movimientoJugador != null)
+            movimientoJugador.congelado = false;
     }
 
     private void IntentarAnimacionLanzar()
@@ -72,10 +90,21 @@ public class CombateJugador : MonoBehaviour
         }
 
         animator.SetTrigger("Lanzar");
+
+        if (TryGetComponent(out HInvisibilidad invisibilidad) && invisibilidad.EstaInvisible())
+        {
+            invisibilidad.CancelarInvisibilidad();
+        }
     }
 
     public void LanzarProyectilEvento()
     {
+        if (prefabProyectil == null || puntoDisparo == null)
+        {
+            Debug.LogWarning("Falta asignar prefab del proyectil o punto de disparo en el Inspector.");
+            return;
+        }
+
         if (enCooldownLanzables || proyectilesLanzadosTotales >= maxProyectilesTotales)
             return;
 
@@ -86,6 +115,10 @@ public class CombateJugador : MonoBehaviour
         if (scriptProyectil != null)
         {
             scriptProyectil.Inicializar(direccion, dañoProyectil);
+        }
+        else
+        {
+            Debug.LogWarning("El proyectil instanciado no tiene un script Proyectil.");
         }
 
         Collider2D colJugador = GetComponent<Collider2D>();
@@ -107,13 +140,10 @@ public class CombateJugador : MonoBehaviour
     private IEnumerator CooldownLanzables()
     {
         enCooldownLanzables = true;
-        Debug.Log("Cooldown: " + tiempoCooldownLanzables + "s...");
         yield return new WaitForSeconds(tiempoCooldownLanzables);
-
         proyectilesLanzadosEnRonda = 0;
         proyectilesLanzadosTotales = 0;
         enCooldownLanzables = false;
-        Debug.Log("Puedes lanzar nuevamente.");
     }
 
     public void RecargarProyectiles()
@@ -125,7 +155,10 @@ public class CombateJugador : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(controladorAtaque.position, radioAtaque);
+        if (controladorAtaque != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(controladorAtaque.position, radioAtaque);
+        }
     }
 }
