@@ -32,4 +32,10 @@ public class CambiarMenus : MonoBehaviour
     {
         StartCoroutine(transicion.FadeYLoadScene(nombreEscenaJuego));
     }
+    public void SalirDelJuego()
+    {
+        Debug.Log("Saliendo del juego...");
+        Application.Quit();
+    }
+
 }
