@@ -60,19 +60,32 @@ public class Centinela : MonoBehaviour
             if (!haDetectado)
             {
                 haDetectado = true;
-                animator.SetBool("Detectando", true);  // Loop de detección
-                animator.SetBool("Esperar", true);      // Detenerse
+                animator.SetBool("Detectando", true);
+                animator.SetBool("Esperar", true);
                 cuentaRegresiva = StartCoroutine(ContarYEliminarJugador(jugadorDetectado));
             }
 
-            GirarHacia(jugadorDetectado.position); // Seguir mirando al jugador
+            GirarHacia(jugadorDetectado.position);
         }
     }
 
     private void DetectarJugador()
     {
         Collider2D deteccion = Physics2D.OverlapBox(puntoVista.position, tamañoDeteccion, 0f, capaJugador);
-        jugadorDetectado = deteccion != null ? deteccion.transform : null;
+
+        if (deteccion != null && !JugadorEsInvisible(deteccion))
+        {
+            jugadorDetectado = deteccion.transform;
+        }
+        else
+        {
+            jugadorDetectado = null;
+        }
+    }
+
+    private bool JugadorEsInvisible(Collider2D col)
+    {
+        return col.TryGetComponent(out HInvisibilidad invis) && invis.EstaInvisible();
     }
 
     private void Patrullar()
@@ -116,13 +129,20 @@ public class Centinela : MonoBehaviour
                 yield break;
             }
 
+            // 🚫 Verificar si se volvió invisible mientras contaba
+            if (JugadorEsInvisible(jugador.GetComponent<Collider2D>()))
+            {
+                animator.SetBool("Detectando", false);
+                yield break;
+            }
+
             tiempo += Time.deltaTime;
             yield return null;
         }
 
         if (jugador.TryGetComponent(out VidaJugador vida))
         {
-            vida.TomarDaño(999); // O llama a un método personalizado de muerte
+            vida.TomarDaño(999); // Cambia esto si tienes una forma especial de matar al jugador
         }
     }
 

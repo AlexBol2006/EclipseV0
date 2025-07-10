@@ -14,6 +14,7 @@ public class EnemiControlador : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private float tiempoEspera;
     private bool estaEsperando;
+    private Vector2 proximoDestino;
 
     [Header("Persecución")]
     [SerializeField] private Transform jugador;
@@ -26,30 +27,36 @@ public class EnemiControlador : MonoBehaviour
     [SerializeField] private Vector2 tamañoDeteccion = new Vector2(4f, 2f);
     [SerializeField] private LayerMask capaJugador;
 
+    private bool jugadorDetectado = false;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         rb.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
-        GirarHacia(waypoints[waypointActual].position);
+        proximoDestino = waypoints[waypointActual].position;
+        GirarHacia(proximoDestino);
     }
 
     private void Update()
     {
-        Collider2D jugadorDetectado = Physics2D.OverlapBox(transform.position, tamañoDeteccion, 0f, capaJugador);
+        Collider2D deteccion = Physics2D.OverlapBox(transform.position, tamañoDeteccion, 0f, capaJugador);
 
-        if (jugadorDetectado == null || JugadorEsInvisible(jugadorDetectado))
+        if (deteccion != null && !JugadorEsInvisible(deteccion))
         {
-            if (jugador != null)
-            {
-                jugador = null; // 🟡 Solo lo hace al perderlo
-                GirarHacia(waypoints[waypointActual].position); // 🟡 Reorientar al waypoint actual
-            }
-
-            Patrullar();
+            jugador = deteccion.transform;
+            jugadorDetectado = true;
+            Perseguir(jugador);
         }
         else
         {
-            Perseguir(jugadorDetectado.transform);
+            if (jugadorDetectado)
+            {
+                jugadorDetectado = false;
+                jugador = null;
+                GirarHacia(proximoDestino); // volver a mirar al destino patrullaje
+            }
+
+            Patrullar();
         }
 
         ControladorAnimacionesEnemigo();
@@ -61,33 +68,48 @@ public class EnemiControlador : MonoBehaviour
             waypointActual = EncontrarWaypointMasCercano();
 
         Vector2 destino = new Vector2(waypoints[waypointActual].position.x, transform.position.y);
+        proximoDestino = waypoints[waypointActual].position;
 
         if (Vector2.Distance(transform.position, destino) > 0.1f)
         {
             transform.position = Vector2.MoveTowards(transform.position, destino, speed * Time.deltaTime);
 
-            if (!ataque.Atacando)
-                GirarHacia(waypoints[waypointActual].position);
+            // Solo girar si no está atacando ni persiguiendo
+            if (!ataque.Atacando && !jugadorDetectado && !estaEsperando)
+                GirarHacia(proximoDestino);
 
             estaEsperando = false;
         }
         else if (!estaEsperando)
         {
-            StartCoroutine(Esperar());
+            StartCoroutine(EsperarYPasarSiguiente());
         }
+    }
+
+    private IEnumerator EsperarYPasarSiguiente()
+    {
+        estaEsperando = true;
+        animator.SetBool("estaEsperando", true);
+
+        yield return new WaitForSeconds(tiempoEspera);
+
+        waypointActual = (waypointActual + 1) % waypoints.Length;
+        proximoDestino = waypoints[waypointActual].position;
+        GirarHacia(proximoDestino);
+
+        estaEsperando = false;
+        animator.SetBool("estaEsperando", false);
     }
 
     private void Perseguir(Transform jugadorDetectado)
     {
-        jugador = jugadorDetectado;
-
-        float distancia = Vector2.Distance(transform.position, jugador.position);
+        float distancia = Vector2.Distance(transform.position, jugadorDetectado.position);
 
         if (distancia > distanciaDetenerse)
         {
-            Vector2 destino = new Vector2(jugador.position.x, transform.position.y);
+            Vector2 destino = new Vector2(jugadorDetectado.position.x, transform.position.y);
             transform.position = Vector2.MoveTowards(transform.position, destino, speedPersecucion * Time.deltaTime);
-            GirarHacia(jugador.position);
+            GirarHacia(jugadorDetectado.position);
             estaEsperando = false;
         }
         else
@@ -96,24 +118,17 @@ public class EnemiControlador : MonoBehaviour
         }
     }
 
-    private bool JugadorEsInvisible(Collider2D jugadorDetectado)
-    {
-        return jugadorDetectado.TryGetComponent(out HInvisibilidad invis) && invis.EstaInvisible();
-    }
-
-    private IEnumerator Esperar()
-    {
-        estaEsperando = true;
-        yield return new WaitForSeconds(tiempoEspera);
-        waypointActual = (waypointActual + 1) % waypoints.Length;
-        estaEsperando = false;
-    }
-
     private void GirarHacia(Vector2 objetivo)
     {
-        transform.rotation = (transform.position.x > objetivo.x)
-            ? Quaternion.Euler(0f, 180f, 0f)
-            : Quaternion.Euler(0f, 0f, 0f);
+        if (transform.position.x > objetivo.x)
+            transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+        else
+            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+    }
+
+    private bool JugadorEsInvisible(Collider2D col)
+    {
+        return col.TryGetComponent(out HInvisibilidad invis) && invis.EstaInvisible();
     }
 
     private int EncontrarWaypointMasCercano()
@@ -130,6 +145,7 @@ public class EnemiControlador : MonoBehaviour
                 indice = i;
             }
         }
+
         return indice;
     }
 
@@ -138,16 +154,7 @@ public class EnemiControlador : MonoBehaviour
         animator.SetBool("estaEsperando", estaEsperando);
     }
 
-    public bool IgnorarJugador(Transform jugador)
-    {
-        if (jugador.TryGetComponent(out HInvisibilidad invis))
-        {
-            return invis.EstaInvisible();
-        }
-        return false;
-    }
-
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(transform.position, tamañoDeteccion);

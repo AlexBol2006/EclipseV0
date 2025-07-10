@@ -1,14 +1,17 @@
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Video;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
-public class IntroVideoManager : MonoBehaviour
+public class ReproducirVideoAlInicio : MonoBehaviour
 {
-    [Header("Elementos asignables")]
-    public VideoPlayer videoPlayer;        // El componente VideoPlayer
-    public GameObject videoScreen;         // El Raw Image que muestra el video
-    public GameObject menuUI;              // El panel del men�
-    public string nombreEscenaGameplay;    // Nombre exacto de la escena de gameplay
+    [Header("Referencias")]
+    public VideoPlayer videoPlayer;
+    public GameObject videoScreen;
+    public GameObject menuUI;
+    public CanvasGroup transitionPanel;
+    public string nombreEscenaGameplay;
 
     private bool videoIniciado = false;
 
@@ -17,29 +20,67 @@ public class IntroVideoManager : MonoBehaviour
         if (videoIniciado) return;
 
         videoIniciado = true;
-        menuUI.SetActive(false);               // Ocultar el men�
-        videoScreen.SetActive(true);           // Mostrar el video
-        videoPlayer.loopPointReached += VideoTerminado;
-        videoPlayer.Play();
+        menuUI.SetActive(false);
+        transitionPanel.gameObject.SetActive(true);
+        transitionPanel.alpha = 1f;
+
+        videoScreen.SetActive(false);
+        StartCoroutine(PrepararYReproducir());
     }
 
-    void Update()
+    private IEnumerator PrepararYReproducir()
+    {
+        videoPlayer.Prepare();
+
+        while (!videoPlayer.isPrepared)
+        {
+            yield return null;
+        }
+
+        videoScreen.SetActive(true); // Mostrar justo antes de reproducir
+        videoPlayer.Play();
+        videoPlayer.loopPointReached += VideoTerminado;
+
+        // Transición negro → video
+        yield return FadeCanvas(1f, 0f, 1f);
+    }
+
+    private void Update()
     {
         if (videoIniciado && Input.GetKeyDown(KeyCode.Space))
         {
             videoPlayer.Stop();
-            CargarEscena();
+            StartCoroutine(FinalizarConTransicion());
         }
     }
 
-    void VideoTerminado(VideoPlayer vp)
+    private void VideoTerminado(VideoPlayer vp)
     {
-        CargarEscena();
+        StartCoroutine(FinalizarConTransicion());
     }
 
-    void CargarEscena()
+    private IEnumerator FinalizarConTransicion()
     {
-        videoScreen.SetActive(false);         // Ocultar la pantalla de video
+        // Transición video → negro
+        yield return FadeCanvas(0f, 1f, 1f);
+
+        videoScreen.SetActive(false);
         SceneManager.LoadScene(nombreEscenaGameplay);
+    }
+
+    private IEnumerator FadeCanvas(float from, float to, float duration, System.Action onComplete = null)
+    {
+        float tiempo = 0f;
+        transitionPanel.alpha = from;
+
+        while (tiempo < duration)
+        {
+            transitionPanel.alpha = Mathf.Lerp(from, to, tiempo / duration);
+            tiempo += Time.deltaTime;
+            yield return null;
+        }
+
+        transitionPanel.alpha = to;
+        onComplete?.Invoke();
     }
 }
